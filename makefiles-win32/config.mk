@@ -102,11 +102,11 @@ OUTDIR = $(PROJECTDIR)\$(OUTFOLDER)
 	@IF NOT EXIST "$(OUTDIR)" @( @mkdir "$(OUTDIR)" )
 
 
-.includes : $(INCLUDEDIRS)
+includes : $(INCLUDEDIRS)
 
 !if "$(INCLUDEDIRS)" != ""
 $(INCLUDEDIRS) ::
-	@echo Processing includes files in $@ ...
+	@echo Processing includes files in $(MAKEDIR)\$@ ...
 	@cd "$@" && $(MAKE) /f "$(ROOTDIR)\makefiles-win32\includes.mk" ROOTDIR="$(ROOTDIR)" TARGET="$(TARGET)" PROJECTDIR="$(PROJECTDIR)" all
 !endif
 

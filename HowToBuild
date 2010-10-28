@@ -1,4 +1,4 @@
-How to Build for Win32
+	How to Build for Win32
 ------------------------
 
 Prerequisites:
@@ -9,14 +9,15 @@ Prerequisites:
 
 3. MS Windows with NTFS support for symbolic links
 
+
 To build:
 
 1. Check the MS Visual Studio 2008 installation directory in the vcvars.bat file
 
-2. run build_includes.bat to prepare include files
-
-3. under the cmd shell:
+2. under the cmd shell:
 
 4.1 run vcvars.bat to setup environment
 
-4.2 run "nmake /f Makefile.win32" to start building process
+4.2 run "nmake /f Makefile.win32 includes" to prepare include files
+
+4.3 run "nmake /f Makefile.win32" to start building process

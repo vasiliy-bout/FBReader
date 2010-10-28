@@ -14,7 +14,7 @@ $(ZLIBDIRS) $(APPDIRS) ::
 
 install: all do_install
 
-clean do_install :
+clean do_install includes :
 	@FOR %%I IN ($(ZLIBDIRS) $(APPDIRS)) DO @( \
 		IF EXIST "%%I" ( \
 			pushd "%%I" && \

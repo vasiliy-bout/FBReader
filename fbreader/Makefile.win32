@@ -12,10 +12,9 @@ SUBDIRS = src/database/sqldb src/database/sqldb/implsqlite src/database/booksdb 
 	src/formats src/formats/fb2 src/formats/css src/formats/html src/formats/pdb src/formats/txt src/formats/tcr src/formats/chm src/formats/xhtml src/formats/oeb src/formats/rtf src/formats/openreader src/formats/util \
 	src/external src/fbreader src/encodingOption src/network src/network/authentication src/network/authentication/basic src/network/atom src/network/opds src/network/authentication/litres \
 	src/blockTree src/libraryActions src/libraryTree src/networkActions src/networkTree src/optionsDialog src/optionsDialog/bookInfo src/optionsDialog/library src/optionsDialog/network src/optionsDialog/system src/optionsDialog/reading src/optionsDialog/lookAndFeel
-INCLUDEDIRS = ../zlibrary/core/include ../zlibrary/core/include/optionEntries ../zlibrary/text/include
 
 
-all: .includes .resources .objects .linking
+all: .resources .objects .linking
 
 !include $(MAKEFILESDIR)\config.mk
 

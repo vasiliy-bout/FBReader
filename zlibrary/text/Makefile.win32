@@ -6,10 +6,10 @@ PROJECTDIR = $(MAKEDIR)
 
 SUBDIRS_ALL = src/model src/area src/view src/style src/styleOptions src/hyphenation
 SUBDIRS =     src/model src/area src/view src/style src/styleOptions src/hyphenation
-INCLUDEDIRS = ../../zlibrary/core/include ../../zlibrary/core/include/optionEntries ../../zlibrary/text/include
+INCLUDEDIRS = include
 
 
-all: .includes .objects .linking
+all: .objects .linking
 
 !include $(MAKEFILESDIR)\config.mk
 
