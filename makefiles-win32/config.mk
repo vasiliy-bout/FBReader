@@ -1,7 +1,10 @@
-# before include this makefile define this macros:
-# ROOTDIR
-# TARGET
-# PROJECTDIR
+# Before include this makefile define this macros:
+#   ROOTDIR
+#   TARGET
+#   PROJECTDIR
+#
+# It is possible to specify INCLUDEDIRS marco with list of include directories to process
+#
 
 !include $(ROOTDIR)\makefiles-win32\platforms.mk
 !include $(ROOTDIR)\makefiles-win32\version.mk
@@ -99,7 +102,16 @@ OUTDIR = $(PROJECTDIR)\$(OUTFOLDER)
 	@IF NOT EXIST "$(OUTDIR)" @( @mkdir "$(OUTDIR)" )
 
 
+.includes : $(INCLUDEDIRS)
+
+!if "$(INCLUDEDIRS)" != ""
+$(INCLUDEDIRS) ::
+	@echo Processing includes files in $@ ...
+	@cd "$@" && $(MAKE) /f "$(ROOTDIR)\makefiles-win32\includes.mk" ROOTDIR="$(ROOTDIR)" TARGET="$(TARGET)" PROJECTDIR="$(PROJECTDIR)" all
+!endif
+
+
 # Is this necessary???
 STDLIBS = kernel32.lib user32.lib winspool.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
-ZINCLUDE = $(ZINCLUDE) /I "D:\work\fbreader-vs\src\unix\include"
-CORE_LIBS = $(CORE_LIBS) /LIBPATH:"D:\work\fbreader-vs\src\unix\lib" $(STDLIBS)
+ZINCLUDE = $(ZINCLUDE) /I "$(ROOTDIR)\deps\include"
+CORE_LIBS = $(CORE_LIBS) /LIBPATH:"$(ROOTDIR)\deps\lib" $(STDLIBS)

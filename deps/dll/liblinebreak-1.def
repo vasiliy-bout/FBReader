@@ -1,0 +1,12 @@
+EXPORTS
+get_next_char_utf16
+get_next_char_utf32
+get_next_char_utf8
+init_linebreak
+is_breakable
+lb_prop_default
+lb_prop_lang_map
+set_linebreaks
+set_linebreaks_utf16
+set_linebreaks_utf32
+set_linebreaks_utf8

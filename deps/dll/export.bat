@@ -1,0 +1,15 @@
+dumpbin /exports jpeg62.dll > jpeg62.def
+dumpbin /exports libcurl-3.dll > libcurl-3.def
+dumpbin /exports libcurl.dll > libcurl.def
+dumpbin /exports libeay32.dll > libeay32.def
+dumpbin /exports libexpat-1.dll > libexpat-1.def
+dumpbin /exports libfribidi-0.dll > libfribidi-0.def
+dumpbin /exports libidn-11.dll > libidn-11.def
+dumpbin /exports liblinebreak-1.dll > liblinebreak-1.def
+dumpbin /exports libpng-3.dll > libpng-3.def
+dumpbin /exports libsqlite3-0.dll > libsqlite3-0.def
+dumpbin /exports libssh2.dll > libssh2.def
+dumpbin /exports libssl32.dll > libssl32.def
+dumpbin /exports libtiff3.dll > libtiff3.def
+dumpbin /exports libungif4.dll > libungif4.def
+dumpbin /exports zlib1.dll > zlib1.def

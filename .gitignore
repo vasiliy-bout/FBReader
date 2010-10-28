@@ -7,3 +7,4 @@ fbreader/Release
 zlibrary/core/Release
 zlibrary/text/Release
 zlibrary/ui/Release
+*.lnk

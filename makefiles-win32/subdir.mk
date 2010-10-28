@@ -1,6 +1,7 @@
 !include $(ROOTDIR)\makefiles-win32\config.mk
 
-.SUFFIXES: .cpp .o .h
+.SUFFIXES:
+.SUFFIXES: .cpp .obj .h
 
 
 !ifdef OBJECTS

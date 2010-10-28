@@ -6,13 +6,14 @@ PROJECTDIR = $(MAKEDIR)
 
 SUBDIRS_ALL = src/model src/area src/view src/style src/styleOptions src/hyphenation
 SUBDIRS =     src/model src/area src/view src/style src/styleOptions src/hyphenation
+INCLUDEDIRS = ../../zlibrary/core/include ../../zlibrary/core/include/optionEntries ../../zlibrary/text/include
 
 
-all: .all
+all: .includes .objects .linking
 
 !include $(MAKEFILESDIR)\config.mk
 
-.all: .objects
+.linking:
 	@echo Creating $(OUTDIR)\$(TARGET).lib ...
 	@IF EXIST "$(OUTDIR)\$(TARGET).lib" @( $(RM_QUIET) "$(OUTDIR)\$(TARGET).lib" )
 !if "$(ZLSHARED)" == "yes"
