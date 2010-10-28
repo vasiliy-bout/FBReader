@@ -1,0 +1,61 @@
+ROOTDIR = $(MAKEDIR)\..\..
+MAKEFILESDIR = $(ROOTDIR)\makefiles-win32
+
+TARGET = zlui-$(UI_TYPE)
+PROJECTDIR = $(MAKEDIR)
+
+SUBDIRS_ALL = src/win32/view src/win32/w32widgets src/win32/dialogs src/win32/application src/win32/image src/win32/library src/win32/time src/win32/message src/unix/message src/nanoX/time src/nanoX/dialogs src/nanoX/optionView src/nanoX/view src/nanoX/image src/nanoX/filesystem src/nanoX/library src/nanoX/application src/cocoa/application src/cocoa/filesystem src/cocoa/library src/cocoa/view src/cocoa/dialogs src/cocoa/image src/cocoa/time src/cocoa/util src/cocoa/message src/iphone/application src/iphone/filesystem src/iphone/library src/iphone/view src/iphone/dialogs src/iphone/image src/iphone/time
+SUBDIRS =     src/win32/view src/win32/w32widgets src/win32/dialogs src/win32/application src/win32/image src/win32/library src/win32/time src/win32/message
+
+
+all: .all
+
+!include $(MAKEFILESDIR)\config.mk
+
+.all: .objects
+	@echo Creating $(OUTDIR)\$(TARGET).lib ...
+	@IF EXIST "$(OUTDIR)\$(TARGET).lib" @( $(RM_QUIET) "$(OUTDIR)\$(TARGET).lib" )
+!if "$(ZLSHARED)" == "yes"
+!error ZLSHARED == yes is unsupported.
+#	link /OUT:"$(OUTDIR)\$(TARGET).lib" /PDB:"$(PDBFILE)" $(LDFLAGS) src\**\*.obj
+#	link /OUT:"$(OUTDIR)\$(TARGET).lib" /PDB:"$(PDBFILE)" $(LDFLAGS) $(XML_LIBS) $(ARCHIVER_LIBS) $(NETWORK_LIBS)
+!else
+	@lib /NOLOGO /OUT:"$(OUTDIR)\$(TARGET).lib" $(LIBFLAGS) "$(OUTDIR)\*.obj"
+!endif
+	@echo OK
+
+
+MAKE_ARGS = /f "$(MAKEFILESDIR)\subdir.mk" ROOTDIR="$(ROOTDIR)" TARGET="$(TARGET)" PROJECTDIR="$(PROJECTDIR)"
+
+.objects: $(SUBDIRS)
+
+$(SUBDIRS) :: .outdir
+	@echo Processing $@ ...
+	@cd "$@" && $(MAKE) $(MAKE_ARGS) all
+
+
+clean:
+	@FOR %%I IN ($(SUBDIRS_ALL)) DO @( \
+		IF EXIST "%%I" ( \
+			pushd "%%I" && \
+			$(MAKE) $(MAKE_ARGS) clean && \
+			popd \
+		) \
+	)
+	@-rmdir /Q /S "$(OUTDIR)"
+
+
+SHARE_ZLIBRARY = $(DESTDIR)$(SHAREDIR)\zlibrary
+KEYNAMES = keynames.xml
+
+do_install:
+	@-mkdir "$(SHARE_ZLIBRARY)"
+	@IF EXIST "data\messages.$(TARGET_ARCH).xml" @( \
+		copy "data\messages.$(TARGET_ARCH).xml" "$(SHARE_ZLIBRARY)\messages.xml" \
+	)
+	@copy "data\keynames.$(TARGET_ARCH)-$(UI_TYPE).xml" "$(SHARE_ZLIBRARY)\$(KEYNAMES)"
+!if "$(ZLSHARED)" == "yes"
+!error ZLSHARED == yes is unsupported.
+#	@install -d $(LIB_ZLIBRARY)\ui
+#	@install $(TARGET) $(LIB_ZLIBRARY)\ui
+!endif

@@ -17,11 +17,27 @@
  * 02110-1301, USA.
  */
 
+#ifdef WIN32
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
+#	include <tchar.h>
+#endif
+
 #include <ZLibrary.h>
 
 #include "FBReader.h"
 
+
+#ifdef WIN32
+int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+	int argc = 1;
+	char **argv = new char*[2];
+	argv[0] = "FBReader";
+	argv[1] = 0;
+#else
 int main(int argc, char **argv) {
+#endif
+
 	if (!ZLibrary::init(argc, argv)) {
 		return 1;
 	}

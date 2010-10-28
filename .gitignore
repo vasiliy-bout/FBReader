@@ -1,0 +1,9 @@
+makefiles/target.mk
+fbreader/Debug
+zlibrary/core/Debug
+zlibrary/text/Debug
+zlibrary/ui/Debug
+fbreader/Release
+zlibrary/core/Release
+zlibrary/text/Release
+zlibrary/ui/Release

@@ -1,0 +1,58 @@
+ROOTDIR = $(MAKEDIR)\..\..
+MAKEFILESDIR = $(ROOTDIR)\makefiles-win32
+
+TARGET = zltext
+PROJECTDIR = $(MAKEDIR)
+
+SUBDIRS_ALL = src/model src/area src/view src/style src/styleOptions src/hyphenation
+SUBDIRS =     src/model src/area src/view src/style src/styleOptions src/hyphenation
+
+
+all: .all
+
+!include $(MAKEFILESDIR)\config.mk
+
+.all: .objects
+	@echo Creating $(OUTDIR)\$(TARGET).lib ...
+	@IF EXIST "$(OUTDIR)\$(TARGET).lib" @( $(RM_QUIET) "$(OUTDIR)\$(TARGET).lib" )
+!if "$(ZLSHARED)" == "yes"
+!error ZLSHARED == yes is unsupported.
+#	link /OUT:"$(OUTDIR)\$(TARGET).lib" /PDB:"$(PDBFILE)" $(LDFLAGS) src\**\*.obj
+#	link /OUT:"$(OUTDIR)\$(TARGET).lib" /PDB:"$(PDBFILE)" $(LDFLAGS) $(XML_LIBS) $(ARCHIVER_LIBS) $(NETWORK_LIBS)
+!else
+	@lib /NOLOGO /OUT:"$(OUTDIR)\$(TARGET).lib" $(LIBFLAGS) "$(OUTDIR)\*.obj"
+!endif
+	@echo OK
+
+
+MAKE_ARGS = /f "$(MAKEFILESDIR)\subdir.mk" ROOTDIR="$(ROOTDIR)" TARGET="$(TARGET)" PROJECTDIR="$(PROJECTDIR)"
+
+.objects: $(SUBDIRS)
+
+$(SUBDIRS) :: .outdir
+	@echo Processing $@ ...
+	@cd "$@" && $(MAKE) $(MAKE_ARGS) all
+
+
+clean:
+	@FOR %%I IN ($(SUBDIRS_ALL)) DO @( \
+		IF EXIST "%%I" ( \
+			pushd "%%I" && \
+			$(MAKE) $(MAKE_ARGS) clean && \
+			popd \
+		) \
+	)
+	@-rmdir /Q /S "$(OUTDIR)"
+
+
+SHARE_ZLIBRARY = $(DESTDIR)$(SHAREDIR)\zlibrary
+
+do_install:
+	@-mkdir "$(SHARE_ZLIBRARY)"
+	@copy /Y "data\hyphenationPatterns.zip" "$(SHARE_ZLIBRARY)"
+!if "$(ZLSHARED)" == "yes"
+!error ZLSHARED == yes is unsupported.
+#	@install -d $(DESTDIR)$(LIBDIR)
+#	@install "$(OUTDIR)\$(TARGET).lib" $(DESTDIR)$(LIBDIR)
+#	@ln -sf "$(OUTDIR)\$(TARGET).lib" $(DESTDIR)$(LIBDIR)\$(TARGET_SONAME)
+!endif

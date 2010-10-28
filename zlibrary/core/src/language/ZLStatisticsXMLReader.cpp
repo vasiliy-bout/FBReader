@@ -31,6 +31,10 @@
 const std::string ZLStatisticsXMLReader::ITEM_TAG = "item";
 const std::string ZLStatisticsXMLReader::STATISTICS_TAG = "statistics";
 
+#ifndef atoll
+#define atoll(x) _atoi64(x)
+#endif
+
 void ZLStatisticsXMLReader::startElementHandler(const char *tag, const char **attributes) {
 	if (STATISTICS_TAG == tag) {
 		size_t volume = atoi(attributeValue(attributes, "volume"));

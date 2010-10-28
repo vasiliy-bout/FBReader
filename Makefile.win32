@@ -1,0 +1,25 @@
+ROOTDIR = $(MAKEDIR)
+
+ZLIBDIRS = zlibrary/core zlibrary/text zlibrary/ui
+APPDIRS = fbreader
+
+all: $(ZLIBDIRS) $(APPDIRS)
+
+
+!include makefiles-win32/platforms.mk
+
+$(ZLIBDIRS) $(APPDIRS) ::
+	@cd "$@" && $(MAKE) /nologo /f Makefile.win32 all
+
+
+install: all do_install
+
+clean do_install :
+	@FOR %%I IN ($(ZLIBDIRS) $(APPDIRS)) DO @( \
+		IF EXIST "%%I" ( \
+			pushd "%%I" && \
+			$(MAKE) /nologo /f Makefile.win32 $@ && \
+			popd \
+		) \
+	)
+

@@ -1,0 +1,71 @@
+ROOTDIR = $(MAKEDIR)\..\..
+MAKEFILESDIR = $(ROOTDIR)\makefiles-win32
+
+TARGET = zlcore
+PROJECTDIR = $(MAKEDIR)
+
+SUBDIRS_ALL = src/library src/typeId src/util src/constants src/logger src/filesystem src/filesystem/zip src/filesystem/bzip2 src/filesystem/tar src/dialogs src/optionEntries src/application src/view src/encoding src/options src/message src/resources src/time src/xml src/xml/expat src/image src/language src/unix/time src/runnable src/network src/network/requests src/blockTreeView src/unix/curl src/desktop/application src/desktop/dialogs src/unix/xmlconfig src/win32/filesystem src/win32/config src/unix/filesystem src/unix/iconv src/unix/library src/win32/encoding 
+SUBDIRS =     src/library src/typeId src/util src/constants src/logger src/filesystem src/filesystem/zip src/filesystem/bzip2 src/filesystem/tar src/dialogs src/optionEntries src/application src/view src/encoding src/options src/message src/resources src/time src/xml src/xml/expat src/image src/language src/unix/time src/runnable src/network src/network/requests src/blockTreeView src/unix/curl src/desktop/application src/desktop/dialogs src/win32/encoding src/win32/filesystem src/win32/config
+
+
+all: .all
+
+!include $(MAKEFILESDIR)\config.mk
+
+.all: .objects
+	@echo Creating $(OUTDIR)\$(TARGET).lib ...
+	@IF EXIST "$(OUTDIR)\$(TARGET).lib" @( $(RM_QUIET) "$(OUTDIR)\$(TARGET).lib" )
+!if "$(ZLSHARED)" == "yes"
+!error ZLSHARED == yes is unsupported.
+#	link /OUT:"$(OUTDIR)\$(TARGET).lib" /PDB:"$(PDBFILE)" $(LDFLAGS) src\**\*.obj
+#	link /OUT:"$(OUTDIR)\$(TARGET).lib" /PDB:"$(PDBFILE)" $(LDFLAGS) $(XML_LIBS) $(ARCHIVER_LIBS) $(NETWORK_LIBS)
+!else
+	@lib /NOLOGO /OUT:"$(OUTDIR)\$(TARGET).lib" $(LIBFLAGS) "$(OUTDIR)\*.obj"
+!endif
+	@echo OK
+
+
+MAKE_ARGS = /f "$(MAKEFILESDIR)\subdir.mk" ROOTDIR="$(ROOTDIR)" TARGET="$(TARGET)" PROJECTDIR="$(PROJECTDIR)"
+
+.objects: $(SUBDIRS)
+
+$(SUBDIRS) :: .outdir
+	@echo Processing $@ ...
+	@cd "$@" && $(MAKE) $(MAKE_ARGS) all
+
+
+clean:
+	@FOR %%I IN ($(SUBDIRS_ALL)) DO @( \
+		IF EXIST "%%I" ( \
+			pushd "%%I" && \
+			$(MAKE) $(MAKE_ARGS) clean && \
+			popd \
+		) \
+	)
+	@-rmdir /Q /S "$(OUTDIR)"
+
+
+SHARE_ZLIBRARY = $(DESTDIR)$(SHAREDIR)\zlibrary
+
+do_install:
+	@-mkdir "$(SHARE_ZLIBRARY)"
+	@-mkdir "$(SHARE_ZLIBRARY)\encodings"
+	@copy /Y "data\encodings\*" "$(SHARE_ZLIBRARY)\encodings"
+	@-mkdir "$(SHARE_ZLIBRARY)\resources"
+	@copy /Y "data\resources\*.xml" "$(SHARE_ZLIBRARY)\resources"
+	@copy /Y "data\languagePatterns.zip" "$(SHARE_ZLIBRARY)"
+	@copy /Y "data\unicode.xml.gz" "$(SHARE_ZLIBRARY)"
+	@-mkdir "$(SHARE_ZLIBRARY)\default"
+
+	@IF EXIST "data\default\config.$(TARGET_ARCH).xml" @( \
+		@copy /Y "data\default\config.$(TARGET_ARCH).xml" "$(SHARE_ZLIBRARY)\default\config.xml" \
+	)
+	@IF EXIST "data\default\config.$(TARGET_ARCH)-$(UI_TYPE).xml" @( \
+		@copy /Y "data\default\config.$(TARGET_ARCH)-$(UI_TYPE).xml" "$(SHARE_ZLIBRARY)\default\config.xml" \
+	)
+!if "$(ZLSHARED)" == "yes"
+!error ZLSHARED == yes is unsupported.
+#	@install -d $(DESTDIR)$(LIBDIR)
+#	@install "$(OUTDIR)\$(TARGET).lib" $(DESTDIR)$(LIBDIR)
+#	@ln -sf "$(OUTDIR)\$(TARGET).lib" $(DESTDIR)$(LIBDIR)\$(TARGET_SONAME)
+!endif
