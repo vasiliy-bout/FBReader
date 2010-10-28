@@ -23,8 +23,10 @@
 #include <vector>
 #include <shared_ptr.h>
 
+#include <ZLResource.h>
+
+
 class ZLOptionsDialog;
-class ZLResourceKey;
 class ProgramCollection;
 class ZLOption;
 class ZLOptionEntry;
