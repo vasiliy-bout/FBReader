@@ -1,4 +1,4 @@
-	How to Build for Win32
+How to Build for Win32
 ------------------------
 
 Prerequisites:
@@ -14,10 +14,8 @@ To build:
 
 1. Check the MS Visual Studio 2008 installation directory in the vcvars.bat file
 
-2. under the cmd shell:
+2. Run prepare.bat
 
-4.1 run vcvars.bat to setup environment
-
-4.2 run "nmake /f Makefile.win32 includes" to prepare include files
-
-4.3 run "nmake /f Makefile.win32" to start building process
+3. Under the cmd shell:
+3.1 run vcvars.bat to setup environment
+3.2 run "nmake /f Makefile.win32" to start building process

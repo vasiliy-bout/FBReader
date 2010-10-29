@@ -9,3 +9,4 @@ zlibrary/text/Release
 zlibrary/ui/Release
 *.lnk
 packages
+deps/lib

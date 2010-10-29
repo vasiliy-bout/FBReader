@@ -73,7 +73,7 @@ exit /B 0
 	)
 
 	pushd %tmpdir%
-	nmake /nologo /f Makefile.win32 clean
+rem	nmake /nologo /f Makefile.win32 clean
 	popd
 exit /B 0
 
