@@ -19,22 +19,22 @@ Section "FBReader"
 
 	WriteRegStr HKCU "Software\FBReader" "" $INSTDIR
 
-	File /oname=FBReader.exe bin/FBReader
-	File ../../libs/win32/*.*
+	File /oname=FBReader.exe bin\FBReader
+	File ..\..\libs\win32\*.*
 	File /r share
-  Delete "$INSTDIR\libiconv-2.dll"
-  Delete "$INSTDIR\share\FBReader\help\MiniHelp.fb2"
-  Delete "$INSTDIR\share\FBReader\hyphenationPatterns.zip"
+	Delete "$INSTDIR\libiconv-2.dll"
+	Delete "$INSTDIR\share\FBReader\help\MiniHelp.fb2"
+	Delete "$INSTDIR\share\FBReader\hyphenationPatterns.zip"
 
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows" "DisplayName" "FBReader for Windows"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows" "NoRepair" 1
-  WriteUninstaller "uninstall.exe"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows" "DisplayName" "FBReader for Windows"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows" "UninstallString" '"$INSTDIR\uninstall.exe"'
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows" "NoModify" 1
+	WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows" "NoRepair" 1
+	WriteUninstaller "uninstall.exe"
 
-  CreateDirectory "$SMPROGRAMS\FBReader for Windows"
-  CreateShortCut "$SMPROGRAMS\FBReader for Windows\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\FBReader for Windows\FBReader.lnk" "$INSTDIR\FBReader.exe" "" "$INSTDIR\FBReader.exe" 0
+	CreateDirectory "$SMPROGRAMS\FBReader for Windows"
+	CreateShortCut "$SMPROGRAMS\FBReader for Windows\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+	CreateShortCut "$SMPROGRAMS\FBReader for Windows\FBReader.lnk" "$INSTDIR\FBReader.exe" "" "$INSTDIR\FBReader.exe" 0
 
 	ReadRegStr $0 HKCU "Software\FBReader\options\Options" "Base:fontFamily"
 	StrCmp $0 "" 0 +2
@@ -59,7 +59,7 @@ Section "FBReader"
 SectionEnd
 
 Section "Create Shortcut on Desktop"
-  CreateShortCut "$DESKTOP\FBReader.lnk" "$INSTDIR\FBReader.exe" "" "$INSTDIR\FBReader.exe" 0
+	CreateShortCut "$DESKTOP\FBReader.lnk" "$INSTDIR\FBReader.exe" "" "$INSTDIR\FBReader.exe" 0
 SectionEnd
 
 Section "Uninstall"
@@ -76,9 +76,9 @@ Section "Uninstall"
 	RMDir "$INSTDIR"
 
 	RMDir /r "$SMPROGRAMS\FBReader for Windows"
-  Delete "$DESKTOP\FBReader.lnk"
+	Delete "$DESKTOP\FBReader.lnk"
 
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows"
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FBReader for Windows"
 	DeleteRegKey /ifempty HKCU "Software\FBReader"
 
 	MessageBox MB_YESNO "Remove FBReader configuration from registry?" IDNO SkipConfigDeletion
@@ -86,6 +86,6 @@ Section "Uninstall"
 	SkipConfigDeletion:
 
 	MessageBox MB_YESNO "Remove FBReader library information?" IDNO SkipLibraryDeletion
-	  RMDir /r "$PROFILE\.FBReader"
+		RMDir /r "$PROFILE\.FBReader"
 	SkipLibraryDeletion:
 SectionEnd

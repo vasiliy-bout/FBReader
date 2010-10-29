@@ -47,6 +47,7 @@ clean:
 
 
 SHARE_ZLIBRARY = $(DESTDIR)$(SHAREDIR)\zlibrary
+LIB_ZLIBRARY = $(DESTDIR)$(LIBDIR)\zlibrary
 KEYNAMES = keynames.xml
 
 do_install:

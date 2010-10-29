@@ -1,0 +1,11 @@
+ROOTDIR = $(MAKEDIR)\..\..
+
+!include $(ROOTDIR)\makefiles-win32\config.mk
+
+SHARE_FBREADER = $(DESTDIR)\share\FBReader
+
+install:
+	@copy /Y "..\data\default\keymap.win32.xml" "$(SHARE_FBREADER)\default\keymap.xml"
+	@copy /Y "..\data\default\styles.win32.xml" "$(SHARE_FBREADER)\default\styles.xml"
+
+clean:

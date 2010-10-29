@@ -1,0 +1,7 @@
+
+TARGET_ARCH = win32
+UI_TYPE = win32
+
+TARGET_STATUS = release
+#TARGET_STATUS = debug
+#TARGET_STATUS = profile

@@ -6,7 +6,8 @@ target = fbreader
 PROJECTDIR = $(MAKEDIR)
 
 SUBDIRS_ALL = src src/database src/database/sqldb src/database/sqldb/implsqlite src/database/booksdb src/database/booksdb/runnables src/migration src/options src/library src/bookmodel src/formats src/formats/fb2 src/formats/docbook src/formats/css src/formats/html src/formats/pdb src/formats/txt src/formats/tcr src/formats/chm src/formats/xhtml src/formats/oeb src/formats/rtf src/formats/openreader src/formats/pdf src/formats/dummy src/formats/util src/external src/fbreader src/encodingOption src/network src/network/authentication src/network/authentication/basic src/network/atom src/network/opds src/network/authentication/litres src/blockTree src/libraryActions src/libraryTree src/networkActions src/networkTree src/optionsDialog src/optionsDialog/bookInfo src/optionsDialog/library src/optionsDialog/network src/optionsDialog/system src/optionsDialog/reading src/optionsDialog/lookAndFeel
-ARCHSUBDIRS_ALL = desktop pdaxrom opie zaurus maemo openzaurus pma400 win32
+#ARCHSUBDIRS_ALL = win32 desktop pdaxrom opie zaurus maemo openzaurus pma400
+ARCHSUBDIRS_ALL = win32
 
 SUBDIRS = src/database/sqldb src/database/sqldb/implsqlite src/database/booksdb src/database/booksdb/runnables src/migration src/options src/library src/bookmodel \
 	src/formats src/formats/fb2 src/formats/css src/formats/html src/formats/pdb src/formats/txt src/formats/tcr src/formats/chm src/formats/xhtml src/formats/oeb src/formats/rtf src/formats/openreader src/formats/util \
@@ -45,6 +46,11 @@ clean:
 			popd \
 		) \
 	)
+	@FOR %%I IN ($(ARCHSUBDIRS_ALL)) DO @( \
+		pushd "%%I" && \
+		$(MAKE) /f "Makefile.win32" ROOTDIR="$(ROOTDIR)" TARGET="$(TARGET)" PROJECTDIR="$(PROJECTDIR)" clean && \
+		popd \
+	)
 	@-rmdir /Q /S "$(OUTDIR)"
 
 
@@ -58,33 +64,33 @@ VARIANT = $(TARGET_ARCH)
 APPIMAGEDIR_REAL = $(APPIMAGEDIR)
 
 do_install:
-#	@-mkdir "$(DESTDIR)$(BINDIR)"
-#	@install "$(OUTDIR)\$(TARGET).exe" $(DESTDIR)$(BINDIR)/FBReader
-#	@install -d $(FBSHAREDIR)
-#	@install -d $(FBSHAREDIR)/help
-#	@./scripts/install_help.sh $(VARIANT) $(FBSHAREDIR)/help
-#	@install -d $(FBSHAREDIR)/network
-#	@install -m 0644 $(wildcard data/network/*.xml) $(FBSHAREDIR)/network
-#	@install -d $(FBSHAREDIR)/network/certificates
-#	@install -m 0644 $(wildcard data/network/certificates/*.crt) $(FBSHAREDIR)/network/certificates
-#	@install -d $(FBSHAREDIR)/formats/html
-#	@install -m 0644 data/formats/html/html.ent $(FBSHAREDIR)/formats/html
-#	@install -d $(FBSHAREDIR)/formats/xhtml
-#	@install -m 0644 $(wildcard data/formats/xhtml/*.ent) $(FBSHAREDIR)/formats/xhtml
-#	@install -d $(FBSHAREDIR)/formats/fb2
-#	@sed "s/VERSION/$(VERSION)/" data/formats/fb2/FBReaderVersion.ent > $(FBSHAREDIR)/formats/fb2/FBReaderVersion.ent
-#	@install -m 0644 data/formats/fb2/fb2genres.xml $(FBSHAREDIR)/formats/fb2
-#	@install -d $(FBSHAREDIR)/default
-#	@./scripts/install_toolbar_and_menu.sh $(VARIANT) $(UI_TYPE) $(FBSHAREDIR)/default
-#	@./scripts/install_config.sh $(VARIANT) $(UI_TYPE) $(FBSHAREDIR)/default
-#	@install -m 0644 data/default/external.$(TARGET_ARCH).xml $(FBSHAREDIR)/default/external.xml
-#	@if [ -f data/default/messages.$(TARGET_ARCH).xml ]; then \
-#		install -m 0644 data/default/messages.$(TARGET_ARCH).xml $(FBSHAREDIR)/default/messages.xml; \
-#	fi
-#	@install -d $(FBSHAREDIR)/resources
-#	@install -m 0644 $(wildcard data/resources/*.xml) $(FBSHAREDIR)/resources
-#	@install -d $(DESTDIR)$(APPIMAGEDIR_REAL)
-#	@install -m 0644 $(wildcard data/icons/toolbar/$(VARIANT)/*.*) $(DESTDIR)$(APPIMAGEDIR_REAL)
-#	@install -m 0644 $(wildcard data/icons/filetree/$(VARIANT)/*.*) $(DESTDIR)$(APPIMAGEDIR_REAL)
-#	@install -m 0644 $(wildcard data/icons/booktree/new/*.*) $(DESTDIR)$(APPIMAGEDIR_REAL)
-#	@make -C $(TARGET_ARCH) RESOLUTION=$(RESOLUTION) install
+	@-mkdir "$(DESTDIR)$(BINDIR)"
+	@copy /Y "$(OUTDIR)\$(TARGET).exe" "$(DESTDIR)$(BINDIR)\FBReader"
+	@-mkdir "$(FBSHAREDIR)"
+	@-mkdir "$(FBSHAREDIR)\help"
+	@.\scripts\install_help.bat "$(VARIANT)" "$(FBSHAREDIR)\help"
+	@-mkdir "$(FBSHAREDIR)\network"
+	@copy /Y "data\network\*.xml" "$(FBSHAREDIR)\network"
+	@-mkdir "$(FBSHAREDIR)\network\certificates"
+	@copy /Y "data\network\certificates\*.crt" "$(FBSHAREDIR)\network\certificates"
+	@-mkdir "$(FBSHAREDIR)\formats\html"
+	@copy /Y "data\formats\html\html.ent" "$(FBSHAREDIR)\formats\html"
+	@-mkdir "$(FBSHAREDIR)\formats\xhtml"
+	@copy /Y "data\formats\xhtml\*.ent" "$(FBSHAREDIR)\formats\xhtml"
+	@-mkdir "$(FBSHAREDIR)\formats\fb2"
+	@sed "s/VERSION/$(VERSION)/" "data\formats\fb2\FBReaderVersion.ent" > "$(FBSHAREDIR)\formats\fb2\FBReaderVersion.ent"
+	@copy /Y "data\formats\fb2\fb2genres.xml" "$(FBSHAREDIR)\formats\fb2"
+	@-mkdir "$(FBSHAREDIR)\default"
+	@.\scripts\install_toolbar_and_menu.bat "$(VARIANT)" "$(UI_TYPE)" "$(FBSHAREDIR)\default"
+	@.\scripts\install_config.bat "$(VARIANT)" "$(UI_TYPE)" "$(FBSHAREDIR)\default"
+	@copy /Y "data\default\external.$(TARGET_ARCH).xml" "$(FBSHAREDIR)\default\external.xml"
+	@IF EXIST "data\default\messages.$(TARGET_ARCH).xml" @( \
+		copy /Y "data\default\messages.$(TARGET_ARCH).xml" "$(FBSHAREDIR)\default\messages.xml" \
+	)
+	@-mkdir "$(FBSHAREDIR)\resources"
+	@copy /Y "data\resources\*.xml" "$(FBSHAREDIR)\resources"
+	@-mkdir "$(DESTDIR)$(APPIMAGEDIR_REAL)"
+	@.\scripts\install_toolbar_icons.bat "$(VARIANT)" "$(DESTDIR)$(APPIMAGEDIR_REAL)"
+	@.\scripts\install_filetree_icons.bat "$(VARIANT)" "$(DESTDIR)$(APPIMAGEDIR_REAL)"
+	@copy /Y "data\icons\booktree\new\*.*" "$(DESTDIR)$(APPIMAGEDIR_REAL)"
+	@cd "$(TARGET_ARCH)" && $(MAKE) /f "Makefile.win32" "RESOLUTION=$(RESOLUTION)" install

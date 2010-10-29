@@ -1,17 +1,17 @@
 build:
-	cd zlibrary/core & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32
-	cd zlibrary/text & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32
-	cd zlibrary/ui   & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32
-	cd fbreader      & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32
+	cd "zlibrary\core" && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32
+	cd "zlibrary\text" && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32
+	cd "zlibrary\ui"   && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32
+	cd "fbreader"      && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32
 
 install:
-	cd zlibrary/core & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 "DESTDIR=$(DESTDIR)" SHAREDIR=/share do_install
-	cd zlibrary/text & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 "DESTDIR=$(DESTDIR)" SHAREDIR=/share do_install
-	cd zlibrary/ui   & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 "DESTDIR=$(DESTDIR)" SHAREDIR=/share do_install
-	cd fbreader      & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 "DESTDIR=$(DESTDIR)" SHAREDIR=/share do_install
+	cd "zlibrary\core" && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 "DESTDIR=$(DESTDIR)" SHAREDIR=\share do_install
+	cd "zlibrary\text" && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 "DESTDIR=$(DESTDIR)" SHAREDIR=\share do_install
+	cd "zlibrary\ui"   && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 "DESTDIR=$(DESTDIR)" SHAREDIR=\share do_install
+	cd "fbreader"      && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 "DESTDIR=$(DESTDIR)" SHAREDIR=\share do_install
 
 clean:
-	cd zlibrary/core & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 clean
-	cd zlibrary/text & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 clean
-	cd zlibrary/ui   & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 clean
-	cd fbreader      & $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 clean
+	cd "zlibrary\core" && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 clean
+	cd "zlibrary\text" && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 clean
+	cd "zlibrary\ui"   && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 clean
+	cd "fbreader"      && $(MAKE) /nologo /f Makefile.win32 TARGET_ARCH=win32 UI_TYPE=win32 clean
