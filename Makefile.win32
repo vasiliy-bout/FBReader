@@ -23,3 +23,8 @@ clean do_install includes :
 		) \
 	)
 
+distclean:
+	@-rmdir /S /Q packages
+	@FOR /D %%I IN ("fbreader-*") DO @( \
+		rmdir /S /Q "%%I" \
+	)
