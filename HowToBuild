@@ -9,13 +9,26 @@ Prerequisites:
 
 3. MS Windows with NTFS support for symbolic links
 
+4. NSIS (it's needed if you want to create installation package; see http://nsis.sf.net)
 
 To build:
 
 1. Check the MS Visual Studio 2008 installation directory in the vcvars.bat file
 
-2. Run prepare.bat
+2. Create (or edit) file "makefiles-win32\target.mk"
+   In this file you should define 3 variables:
+	TARGET_ARCH -- target platform for building FBReader
+	UI_TYPE -- UI library
+	TARGET_STATUS -- "release", "debug" or "profile". "release" is reasonable choice for almost all users.
 
-3. Under the cmd shell:
-3.1 run vcvars.bat to setup environment
-3.2 run "nmake /f Makefile.win32" to start building process
+   Possible pairs for TARGET_ARCH + UI_TYPE are:
+	TARGET_ARCH = win32                 UI_TYPE = win32
+
+3. Check options in the "makefiles-win32\arch\$(TARGET_ARCH).mk"
+   This file defines compilers, compilation flags, etc.
+
+4. Run prepare.bat
+
+5. Under the cmd shell:
+5.1 run vcvars.bat to setup environment
+5.2 run "nmake /f Makefile.win32" to start building process
