@@ -1,30 +1,35 @@
 !include $(ROOTDIR)\makefiles-win32\config.mk
 
 .SUFFIXES:
-.SUFFIXES: .cpp .obj .h
 
 
-!ifdef OBJECTS
+!ifndef OBJECTS
 
-all: $(OBJECTS)
+all: *.cpp
+	@$(MAKE) /f "$(ROOTDIR)\makefiles-win32\subdir.mk" SOURCES="$?" OBJECTS="$(?:.cpp=.obj)" all
 
-$(OBJECTS) : $(OUTDIR)\$(@F)
+
+!elseif [ cd "$(OUTDIR)" && dir /B $(OBJECTS) >nul 2>&1 ]
+
+all:
+	@$(CC) $(CFLAGS) /I "$(INCLUDE)" $(ZINCLUDE) $(SOURCES)
+
 
 !else
 
-all: *.cpp
-	@$(MAKE) /f "$(ROOTDIR)\makefiles-win32\subdir.mk" OBJECTS="$(?:.cpp=.obj)" all
+.SUFFIXES: .cpp .obj .h
 
-!endif
+all: $(OBJECTS)
 
+$(OBJECTS) : "$(OUTDIR)\$(@F)"
+
+.cpp{$(OUTDIR)}.obj:
+	@$(CC) $(CFLAGS) /I "$(INCLUDE)" $(ZINCLUDE) "$<"
 
 .cpp.obj:
 
 
-.cpp{$(OUTDIR)}.obj:
-#	@echo Compiling $@ ...
-	@$(CC) $(CFLAGS) /I "$(INCLUDE)" $(ZINCLUDE) "$<"
-#	@echo OK
+!endif
+
 
 clean:
-#	@$(RM) *.obj *.pdb

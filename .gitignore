@@ -1,4 +1,5 @@
 makefiles/target.mk
+makefiles-win32/target.mk
 fbreader/Debug
 zlibrary/core/Debug
 zlibrary/text/Debug
