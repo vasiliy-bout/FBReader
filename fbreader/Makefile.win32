@@ -29,26 +29,26 @@ all: .resources .objects .linking
 	@echo OK
 
 
-MAKE_ARGS = /f "$(MAKEFILESDIR)\subdir.mk" ROOTDIR="$(ROOTDIR)" TARGET="$(TARGET)" PROJECTDIR="$(PROJECTDIR)"
+MAKE_ARGS = TARGET="$(TARGET)" PROJECTDIR="$(PROJECTDIR)" CFLAGS="/D \"VERSION=\\\"$(VERSION)\\\"\""
 
 .objects: $(SUBDIRS)
 
 $(SUBDIRS) :: .outdir
 	@echo Processing $@ ...
-	@cd "$@" && $(MAKE) $(MAKE_ARGS) all
+	@cd "$@" && $(MAKE) /f "$(MAKEFILESDIR)\subdir.mk" $(MAKE_ARGS) all
 
 
 clean:
 	@FOR %%I IN ($(SUBDIRS_ALL)) DO @( \
 		IF EXIST "%%I" ( \
 			pushd "%%I" && \
-			$(MAKE) $(MAKE_ARGS) clean && \
+			$(MAKE) /f "$(MAKEFILESDIR)\subdir.mk" $(MAKE_ARGS) clean && \
 			popd \
 		) \
 	)
 	@FOR %%I IN ($(ARCHSUBDIRS_ALL)) DO @( \
 		pushd "%%I" && \
-		$(MAKE) /f "Makefile.win32" ROOTDIR="$(ROOTDIR)" TARGET="$(TARGET)" PROJECTDIR="$(PROJECTDIR)" clean && \
+		$(MAKE) /f "Makefile.win32" $(MAKE_ARGS) clean && \
 		popd \
 	)
 	@-rmdir /Q /S "$(OUTDIR)"
