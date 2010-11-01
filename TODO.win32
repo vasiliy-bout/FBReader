@@ -1,8 +1,3 @@
-?? RtfReaderStream::read -- почему не используется myOffset??
-?? ZLCharSequence::~ZLCharSequence() -- нет проверки myHead на 0
-
-!! ZLCharSequence::~ZLCharSequence() -- проверить наличие записи за границы массива!!
-
 
 ** постепенно вообще избавиться от левых библиотек
 	** libexpat
