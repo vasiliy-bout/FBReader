@@ -63,7 +63,9 @@ CFLAGS = $(CFLAGS) /D "ZLSHARED"
 !endif
 
 !if "$(TARGET_STATUS)" == "release"
-CFLAGS = $(CFLAGS) /D "NDEBUG" /O2 /Oi /GL /Ot /GF /EHsc /Gy /MD /Zi
+#CFLAGS = $(CFLAGS) /D "NDEBUG" /O2 /Oi /GL /Ot /GF /EHsc /Gy /MD /Zi
+CFLAGS = $(CFLAGS) /D "NDEBUG" /Od /Oi /GL /Ot /GF /EHsc /Gy /MD /Zi
+
 LDFLAGS = $(LDFLAGS) /INCREMENTAL:NO /OPT:REF /OPT:ICF /LTCG
 LIBFLAGS = $(LIBFLAGS) /LTCG
 !endif
