@@ -11,3 +11,6 @@ zlibrary/ui/Release
 *.lnk
 packages
 deps/lib
+.cproject
+.project
+.settings
