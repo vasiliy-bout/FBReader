@@ -14,3 +14,4 @@ deps/lib
 .cproject
 .project
 .settings
+fbreader/version.mk

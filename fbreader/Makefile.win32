@@ -19,6 +19,12 @@ all: .resources .objects .linking
 
 !include $(MAKEFILESDIR)\config.mk
 
+!if [ sed -e "s/^/VERSION=/; q" VERSION > version.mk ]
+!error Unable to create "version.mk" file
+!else
+!include version.mk
+!endif
+
 .linking:
 	@echo Linking $(OUTDIR)\$(TARGET).exe ...
 	@IF NOT "$(INCREMENTAL_LINK)"=="yes" @( \
@@ -52,6 +58,7 @@ clean:
 		popd \
 	)
 	@-rmdir /Q /S "$(OUTDIR)"
+	@$(RM) version.mk
 
 
 FBSHAREDIR = $(DESTDIR)$(SHAREDIR)\FBReader

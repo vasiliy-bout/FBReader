@@ -7,7 +7,6 @@
 #
 
 !include $(ROOTDIR)\makefiles-win32\platforms.mk
-!include $(ROOTDIR)\makefiles-win32\version.mk
 
 MAKE = nmake /nologo ROOTDIR=$(ROOTDIR)
 LIBMAKE = $(MAKE) ZLSHARED=$(ZLSHARED)
