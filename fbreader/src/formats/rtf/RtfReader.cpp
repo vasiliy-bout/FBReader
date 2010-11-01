@@ -325,7 +325,7 @@ bool RtfReader::parseDocument() {
 					}
 					break;
 				case READ_KEYWORD:
-					if (!isalpha(*ptr)) {
+					if (!isalpha((unsigned char)*ptr)) {
 						if ((ptr == dataStart) && (keyword.empty())) {
 							if (*ptr == '\'') {
 								parserState = READ_HEX_SYMBOL;
@@ -337,7 +337,7 @@ bool RtfReader::parseDocument() {
 							dataStart = ptr + 1;
 						} else {
 							keyword.append(dataStart, ptr - dataStart);
-							if ((*ptr == '-') || isdigit(*ptr)) {
+							if ((*ptr == '-') || isdigit((unsigned char)*ptr)) {
 								dataStart = ptr;
 								parserState = READ_KEYWORD_PARAMETER;
 							} else {
@@ -350,7 +350,7 @@ bool RtfReader::parseDocument() {
 					}
 					break;
 				case READ_KEYWORD_PARAMETER:
-					if (!isdigit(*ptr)) {
+					if (!isdigit((unsigned char)*ptr)) {
 						parameterString.append(dataStart, ptr - dataStart);
 						int parameter = atoi(parameterString.c_str());
 						parameterString.erase();

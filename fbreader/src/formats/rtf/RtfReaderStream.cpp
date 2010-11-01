@@ -70,7 +70,9 @@ void RtfTextOnlyReader::addCharData(const char *data, size_t len, bool) {
 		if (myFilledSize < myMaxSize) {
 			len = std::min((size_t)len, myMaxSize - myFilledSize);
 			memcpy(myBuffer + myFilledSize, data, len);
-				myFilledSize += len;
+			myFilledSize += len;
+		}
+		if (myFilledSize < myMaxSize) {
 			myBuffer[myFilledSize++]=' ';
 		} else {
 			interrupt();
