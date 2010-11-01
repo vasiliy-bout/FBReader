@@ -145,7 +145,7 @@ bool RtfReaderStream::open() {
 size_t RtfReaderStream::read(char *buffer, size_t maxSize) {
 	maxSize = std::min(maxSize, mySize - myOffset);
 	if ((buffer != 0) && (myBuffer !=0)) {
-		memcpy(buffer, myBuffer, maxSize);
+		memcpy(buffer, myBuffer + myOffset, maxSize);
 	}
 	myOffset += maxSize;
 	return maxSize;
