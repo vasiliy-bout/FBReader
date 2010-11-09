@@ -30,8 +30,9 @@
 
 #include "ZLXMLReader.h"
 
-#include "expat/ZLXMLReaderInternal.h"
+#include "msxml/ZLMSXMLReaderInternal.h"
 
+/*
 class ZLXMLReaderHandler : public ZLAsynchronousInputStream::Handler {
 
 public:
@@ -59,6 +60,7 @@ void ZLXMLReaderHandler::shutdown() {
 bool ZLXMLReaderHandler::handleBuffer(const char *data, size_t len) {
 	return myReader.readFromBuffer(data, len);
 }
+*/
 
 
 
@@ -82,7 +84,8 @@ const std::map<std::string,std::string> &ZLXMLReader::namespaces() const {
 }
 
 ZLXMLReader::ZLXMLReader(const char *encoding) {
-	myInternalReader = new ZLXMLReaderInternal(*this, encoding);
+	// FIXME: encoding is not handled!!!
+	myInternalReader = new ZLMSXMLReaderInternal(*this);
 	myParserBuffer = new char[BUFFER_SIZE];
 }
 
@@ -107,30 +110,31 @@ bool ZLXMLReader::readDocument(shared_ptr<ZLInputStream> stream) {
 	int index = stringBuffer.find('>');
 	if (index > 0) {
 		stringBuffer = ZLUnicodeUtil::toLower(stringBuffer.substr(0, index));
-		int index = stringBuffer.find("\"iso-8859-1\"");
-		if (index > 0) {
+		const int isoIndex = stringBuffer.find("\"iso-8859-1\"");
+		if (isoIndex > 0) {
 			useWindows1252 = true;
 		}
 	}
 	initialize(useWindows1252 ? "windows-1252" : 0);
 
-	size_t length;
-	do {
-		length = stream->read(myParserBuffer, BUFFER_SIZE);
-		if (!readFromBuffer(myParserBuffer, length)) {
-			break;
-		}
-	} while ((length == BUFFER_SIZE) && !myInterrupted);
-
+//	size_t length;
+//	do {
+//		length = stream->read(myParserBuffer, BUFFER_SIZE);
+//		if (!readFromBuffer(myParserBuffer, length)) {
+//			break;
+//		}
+//	} while ((length == BUFFER_SIZE) && !myInterrupted);
+	bool result = myInternalReader->readDocument(stream);
 	stream->close();
 
 	shutdown();
 
-	return true;
+	return result;
 }
 
 void ZLXMLReader::initialize(const char *encoding) {
-	myInternalReader->init(encoding);
+	//FIXME: encoding is not handled!!!
+	//myInternalReader->init(encoding);
 	myInterrupted = false;
 	myNamespaces.push_back(new std::map<std::string, std::string>());
 }
@@ -139,9 +143,9 @@ void ZLXMLReader::shutdown() {
 	myNamespaces.clear();
 }
 
-bool ZLXMLReader::readFromBuffer(const char *data, size_t len) {
-	return myInternalReader->parseBuffer(data, len);
-}
+//bool ZLXMLReader::readFromBuffer(const char *data, size_t len) {
+//	return myInternalReader->parseBuffer(data, len);
+//}
 
 bool ZLXMLReader::processNamespaces() const {
 	return false;
@@ -206,8 +210,10 @@ const char *ZLXMLReader::attributeValue(const char **xmlattributes, const Attrib
 }
 
 bool ZLXMLReader::readDocument(shared_ptr<ZLAsynchronousInputStream> stream) {
-	ZLXMLReaderHandler handler(*this);
-	return stream->processInput(handler);
+//	ZLXMLReaderHandler handler(*this);
+//	return stream->processInput(handler);
+	setErrorMessage("Asynchronous XML parser is not implemented!!!");
+	return false;
 }
 
 const std::string &ZLXMLReader::errorMessage() const {

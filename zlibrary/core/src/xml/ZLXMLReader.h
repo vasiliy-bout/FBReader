@@ -29,7 +29,7 @@
 class ZLFile;
 class ZLInputStream;
 class ZLAsynchronousInputStream;
-class ZLXMLReaderInternal;
+class ZLMSXMLReaderInternal;
 
 class ZLXMLReader {
 
@@ -82,7 +82,7 @@ public:
 private:
 	void initialize(const char *encoding = 0);
 	void shutdown();
-	bool readFromBuffer(const char *data, size_t len);
+	//bool readFromBuffer(const char *data, size_t len);
 
 protected:
 	virtual void startElementHandler(const char *tag, const char **attributes);
@@ -100,14 +100,16 @@ protected:
 
 private:
 	bool myInterrupted;
-	ZLXMLReaderInternal *myInternalReader;
+	ZLMSXMLReaderInternal *myInternalReader;
 	char *myParserBuffer;
 	std::vector<shared_ptr<std::map<std::string,std::string> > > myNamespaces;
 
 	std::string myErrorMessage;
 
-friend class ZLXMLReaderInternal;
+friend class ZLMSXMLReaderInternal;
 friend class ZLXMLReaderHandler;
+friend class W32ContentHandler;
+friend class W32EntityResolver;
 };
 
 inline bool ZLXMLReader::isInterrupted() const {

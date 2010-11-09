@@ -43,7 +43,7 @@ APPIMAGEDIR_MACRO = $(APPIMAGEDIR)
 !endif
 
 !ifndef XML_LIBS
-XML_LIBS = libexpat-1.lib
+XML_LIBS = msxml2.lib
 !endif
 !ifndef ARCHIVER_LIBS
 ARCHIVER_LIBS = zlib1.lib libbz2.lib
