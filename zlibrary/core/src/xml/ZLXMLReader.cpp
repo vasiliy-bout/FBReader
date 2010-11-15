@@ -84,8 +84,7 @@ const std::map<std::string,std::string> &ZLXMLReader::namespaces() const {
 }
 
 ZLXMLReader::ZLXMLReader(const char *encoding) {
-	// FIXME: encoding is not handled!!!
-	myInternalReader = new ZLMSXMLReaderInternal(*this);
+	myInternalReader = new ZLMSXMLReaderInternal(*this, encoding);
 	myParserBuffer = new char[BUFFER_SIZE];
 }
 
@@ -133,8 +132,7 @@ bool ZLXMLReader::readDocument(shared_ptr<ZLInputStream> stream) {
 }
 
 void ZLXMLReader::initialize(const char *encoding) {
-	//FIXME: encoding is not handled!!!
-	//myInternalReader->init(encoding);
+	myInternalReader->init(encoding);
 	myInterrupted = false;
 	myNamespaces.push_back(new std::map<std::string, std::string>());
 }

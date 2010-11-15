@@ -35,10 +35,14 @@ class ZLInputStream;
 class ZLMSXMLReaderInternal {
 
 public:
-	ZLMSXMLReaderInternal(ZLXMLReader &reader);
+	ZLMSXMLReaderInternal(ZLXMLReader &reader, const char *encoding);
 	~ZLMSXMLReaderInternal();
 
+private:
+	HRESULT setEncoding(const char *encoding);
+
 public:
+	void init(const char *encoding);
 	bool readDocument(shared_ptr<ZLInputStream> stream);
 
 private:
