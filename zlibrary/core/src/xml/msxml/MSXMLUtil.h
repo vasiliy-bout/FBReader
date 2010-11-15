@@ -17,38 +17,20 @@
  * 02110-1301, USA.
  */
 
-#ifndef __W32ENTITYRESOLVER_H__
-#define __W32ENTITYRESOLVER_H__
+#ifndef __MSXMLUTIL_H__
+#define __MSXMLUTIL_H__
 
 #include <msxml6.h>
 
 
-class ZLXMLReader;
-
-class W32EntityResolver : public ISAXEntityResolver {
-
-public:
-	W32EntityResolver(ZLXMLReader &reader);
-	virtual ~W32EntityResolver();
-
-public:
-	virtual HRESULT STDMETHODCALLTYPE resolveEntity(const wchar_t *pwchPublicId,
-			const wchar_t *pwchSystemId, VARIANT *pvarInput);
+class MSXMLUtil {
 
 private:
-	ZLXMLReader &myReader;
+	MSXMLUtil();
 
-	// Following code implements common IUnknown interface
 public:
-	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
-	virtual ULONG STDMETHODCALLTYPE AddRef();
-	virtual ULONG STDMETHODCALLTYPE Release();
-private:
-	volatile LONG myRefs;
-
-private: // disable copying
-	W32EntityResolver(const W32EntityResolver &);
-	const W32EntityResolver &operator = (const W32EntityResolver &);
+	static int decodeWideChars(const wchar_t *wideChars, const int len,
+			char **pBuffer, unsigned *pBufferSize);
 };
 
-#endif /* __W32ENTITYRESOLVER_H__ */
+#endif /* __MSXMLUTIL_H__ */

@@ -20,7 +20,7 @@
 #ifndef __ZLMSXMLREADERINTERNAL_H__
 #define __ZLMSXMLREADERINTERNAL_H__
 
-#include <msxml2.h>
+#include <msxml6.h>
 #include <string>
 
 #include <shared_ptr.h>
@@ -49,8 +49,9 @@ private:
 	W32ErrorHandler *myErrorHandler;
 	W32EntityResolver *myEntityResolver;
 
-private:
-	ZLMSXMLReaderInternal(const ZLMSXMLReaderInternal &); // disable copying
+private: // disable copying
+	ZLMSXMLReaderInternal(const ZLMSXMLReaderInternal &);
+	const ZLMSXMLReaderInternal &operator = (const ZLMSXMLReaderInternal &);
 };
 
 #endif /* __ZLMSXMLREADERINTERNAL_H__ */

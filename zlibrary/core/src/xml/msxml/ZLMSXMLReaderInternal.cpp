@@ -37,12 +37,17 @@ ZLMSXMLReaderInternal::ZLMSXMLReaderInternal(ZLXMLReader &reader) : myReader(rea
 		return;
 	}
 
-	CoCreateInstance(CLSID_SAXXMLReader30, 0, CLSCTX_INPROC_SERVER, IID_ISAXXMLReader, (LPVOID*)&mySaxReader);
+	CoCreateInstance(CLSID_SAXXMLReader60, 0, CLSCTX_INPROC_SERVER, IID_ISAXXMLReader, (LPVOID*)&mySaxReader);
 	if (mySaxReader == 0) {
 		return;
 	}
 
 	mySaxReader->putFeature(L"http://xml.org/sax/features/namespace-prefixes", VARIANT_TRUE);
+	mySaxReader->putFeature(L"prohibit-dtd", VARIANT_FALSE);
+
+	const VARIANT_BOOL parseDtd = myReader.externalDTDs().empty() ? VARIANT_FALSE : VARIANT_TRUE;
+	mySaxReader->putFeature(L"http://xml.org/sax/features/external-general-entities", parseDtd);
+	mySaxReader->putFeature(L"http://xml.org/sax/features/external-parameter-entities", parseDtd);
 
 	myContentHandler = new W32ContentHandler(myReader);
 	myErrorHandler = new W32ErrorHandler();
@@ -69,6 +74,10 @@ ZLMSXMLReaderInternal::~ZLMSXMLReaderInternal() {
 
 
 bool ZLMSXMLReaderInternal::readDocument(shared_ptr<ZLInputStream> stream) {
+	if (mySaxReader == 0) {
+		return false;
+	}
+
 	VARIANT input;
 	VariantInit(&input);
 	V_VT(&input) = VT_UNKNOWN;

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="koi8-r"?>
+<!DOCTYPE FictionBook PUBLIC "-//fbreader.org//formats" "http://data.fbreader.org/formats/fb2">
 <FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0" xmlns:l="http://www.w3.org/1999/xlink"><description><title-info><author><last-name>FBReader</last-name></author> <book-title>О программе FBReader</book-title> <lang>ru</lang></title-info></description>
 <body>
 <title><p>О программе FBReader &FBReaderVersion;</p></title>

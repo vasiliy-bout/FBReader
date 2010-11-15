@@ -20,7 +20,7 @@
 #ifndef __W32SYNCHRONOUSSTREAM_H__
 #define __W32SYNCHRONOUSSTREAM_H__
 
-#include <msxml2.h>
+#include <msxml6.h>
 
 #include <shared_ptr.h>
 
@@ -30,7 +30,7 @@ class ZLInputStream;
 class W32SynchronousStream : public ISequentialStream {
 
 public:
-	W32SynchronousStream(shared_ptr<ZLInputStream> stream);
+	W32SynchronousStream(shared_ptr<ZLInputStream> stream, bool closeStream = false);
 	virtual ~W32SynchronousStream();
 
 public:
@@ -40,6 +40,7 @@ public:
 
 private:
 	shared_ptr<ZLInputStream> myStream;
+	const bool myCloseStream;
 
 	// Following code implements common IUnknown interface
 public:
@@ -51,6 +52,7 @@ private:
 
 private: // disable copying
 	W32SynchronousStream(const W32SynchronousStream &);
+	const W32SynchronousStream &operator = (const W32SynchronousStream &);
 };
 
 #endif /* __W32SYNCHRONOUSSTREAM_H__ */

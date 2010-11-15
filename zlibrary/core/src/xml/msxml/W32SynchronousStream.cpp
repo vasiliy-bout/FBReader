@@ -22,10 +22,13 @@
 #include <ZLInputStream.h>
 
 
-W32SynchronousStream::W32SynchronousStream(shared_ptr<ZLInputStream> stream) : myStream(stream), myRefs(1) {
+W32SynchronousStream::W32SynchronousStream(shared_ptr<ZLInputStream> stream, bool closeStream) : myStream(stream), myCloseStream(closeStream), myRefs(1) {
 }
 
 W32SynchronousStream::~W32SynchronousStream() {
+	if (myCloseStream && !myStream.isNull()) {
+		myStream->close();
+	}
 }
 
 

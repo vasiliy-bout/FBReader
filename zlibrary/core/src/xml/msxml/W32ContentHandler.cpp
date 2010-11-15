@@ -21,45 +21,7 @@
 
 #include "../ZLXMLReader.h"
 
-
-/*
- * The function returns -1 if it doesn't succeed.
- * If the function succeeds, it returns the length of the string written to the *pBuffer.
- * Null-terminator is appended to the *pBuffer.
- */
-static int decodeWideChars(const wchar_t *wideChars, const int len, char **pBuffer, unsigned *pBufferSize) {
-	static const size_t MINIMAL_SIZE = 16;
-
-	if (wideChars == 0 || len == 0 || *wideChars == L'\0') {
-		if (*pBuffer == 0) {
-			*pBuffer = new char[*pBufferSize = MINIMAL_SIZE];
-		}
-		**pBuffer = '\0';
-		return 0;
-	}
-	int decodedLength = WideCharToMultiByte(CP_UTF8, 0, wideChars, len, 0, 0, 0, 0);
-	if (len > 0) {
-		++decodedLength;
-	}
-	if (decodedLength < MINIMAL_SIZE) {
-		decodedLength = MINIMAL_SIZE;
-	}
-	if ((unsigned) decodedLength > *pBufferSize) {
-		if (*pBuffer != 0) {
-			delete[] *pBuffer;
-		}
-		*pBuffer = new char[*pBufferSize = decodedLength];
-	}
-	decodedLength = WideCharToMultiByte(CP_UTF8, 0, wideChars, len, *pBuffer, *pBufferSize, 0, 0);
-	if (decodedLength == 0) {
-		return -1;
-	}
-	if (len > 0) {
-		(*pBuffer)[decodedLength++] = '\0';
-	}
-	return decodedLength - 1;
-}
-
+#include "MSXMLUtil.h"
 
 
 W32ContentHandler::W32ContentHandler(ZLXMLReader &reader) : myReader(reader),
@@ -91,7 +53,7 @@ int W32ContentHandler::setAttributeString(int index, const wchar_t *value, int l
 		attrIt = myAttributes.insert(attrIt, 0);
 		sizesIt = myAttributesSizes.insert(sizesIt, 0);
 	}
-	return decodeWideChars(value, len, &*attrIt, &*sizesIt);
+	return MSXMLUtil::decodeWideChars(value, len, &*attrIt, &*sizesIt);
 }
 
 void W32ContentHandler::terminateAttributes(int index) {
@@ -138,7 +100,7 @@ HRESULT STDMETHODCALLTYPE W32ContentHandler::characters(const wchar_t *pwchChars
 	if (myReader.isInterrupted()) {
 		return S_OK; // TODO: interrupt???
 	}
-	const int len = decodeWideChars(pwchChars, cchChars, &myBuffer, &myBufferSize);
+	const int len = MSXMLUtil::decodeWideChars(pwchChars, cchChars, &myBuffer, &myBufferSize);
 	if (len < 0) {
 		return E_FAIL;
 	}
@@ -159,7 +121,7 @@ HRESULT STDMETHODCALLTYPE W32ContentHandler::startElement(const wchar_t *pwchNam
 		return res;
 	}
 
-	if (decodeWideChars(pwchQName, cchQName, &myBuffer, &myBufferSize) < 0) {
+	if (MSXMLUtil::decodeWideChars(pwchQName, cchQName, &myBuffer, &myBufferSize) < 0) {
 		return E_FAIL;
 	}
 
@@ -196,7 +158,7 @@ HRESULT STDMETHODCALLTYPE W32ContentHandler::endElement(const wchar_t *pwchNames
 		return S_OK; // TODO: interrupt???
 	}
 
-	if (decodeWideChars(pwchQName, cchQName, &myBuffer, &myBufferSize) < 0) {
+	if (MSXMLUtil::decodeWideChars(pwchQName, cchQName, &myBuffer, &myBufferSize) < 0) {
 		return E_FAIL;
 	}
 	myReader.endElementHandler(myBuffer);

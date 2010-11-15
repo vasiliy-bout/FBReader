@@ -23,6 +23,12 @@
 #include "W32EntityResolver.h"
 
 #include <ZLXMLReader.h>
+#include <ZLFile.h>
+#include <ZLInputStream.h>
+#include <ZLibrary.h>
+
+#include "MSXMLUtil.h"
+#include "W32SynchronousStream.h"
 
 
 W32EntityResolver::W32EntityResolver(ZLXMLReader &reader) : myReader(reader), myRefs(1) {
@@ -31,28 +37,57 @@ W32EntityResolver::W32EntityResolver(ZLXMLReader &reader) : myReader(reader), my
 W32EntityResolver::~W32EntityResolver() {
 }
 
+static const std::wstring FBREADER_PUBLIC_ID = L"-//fbreader.org//formats";
+static const std::wstring FBREADER_SYSTEM_PREFIX = L"http://data.fbreader.org/";
 
 HRESULT STDMETHODCALLTYPE W32EntityResolver::resolveEntity(const wchar_t *pwchPublicId,
 		const wchar_t *pwchSystemId, VARIANT *pvarInput) {
 
-	/*const std::vector<std::string> &dtds = myReader.externalDTDs();
+	if (FBREADER_PUBLIC_ID.compare(pwchPublicId) != 0) {
+		return S_OK;
+	}
+
+	if (FBREADER_SYSTEM_PREFIX.compare(0, FBREADER_SYSTEM_PREFIX.length(),
+			pwchSystemId, FBREADER_SYSTEM_PREFIX.length()) != 0) {
+		return S_OK;
+	}
+
+	char *buffer = 0;
+	unsigned size = 0;
+	int len = MSXMLUtil::decodeWideChars(pwchSystemId + FBREADER_SYSTEM_PREFIX.length(), -1, &buffer, &size);
+	if (len < 0) {
+		if (buffer != 0) {
+			delete[] buffer;
+		}
+		return E_FAIL;
+	}
+	std::string pattern(buffer, len);
+	delete[] buffer;
+	buffer = 0;
+
+	if (ZLibrary::FileNameDelimiter.compare("/") != 0) {
+		size_t index = 0;
+		while ((index = pattern.find("/", index)) != -1) {
+			pattern.replace(index, 1, ZLibrary::FileNameDelimiter);
+		}
+	}
+
+	const std::vector<std::string> &dtds = myReader.externalDTDs();
 	for (std::vector<std::string>::const_iterator it = dtds.begin(); it != dtds.end(); ++it) {
-		ZLFile dtdFile(*it);
+		const std::string &fileName = *it;
+		if (fileName.find(pattern, 0) == -1) {
+			continue;
+		}
+		ZLFile dtdFile(fileName);
 		shared_ptr<ZLInputStream> entityStream = dtdFile.inputStream();
 		if (!entityStream.isNull() && entityStream->open()) {
-			const size_t BUFSIZE = 2048;
-			char buffer[BUFSIZE];
-			size_t length;
-			do {
-				length = entityStream->read(buffer, BUFSIZE);
-				if (XML_Parse(entityParser, buffer, length, 0) == XML_STATUS_ERROR) {
-					break;
-				}
-			} while (length == BUFSIZE);
+			VariantInit(pvarInput);
+			V_VT(pvarInput) = VT_UNKNOWN;
+			V_UNKNOWN(pvarInput) = new W32SynchronousStream(entityStream, true);
+			return S_OK;
 		}
-	}*/
-
-	return S_OK;
+	}
+	return E_FAIL;
 }
 
 

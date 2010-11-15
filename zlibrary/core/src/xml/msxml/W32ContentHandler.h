@@ -20,7 +20,7 @@
 #ifndef __W32CONTENTHANDLER_H__
 #define __W32CONTENTHANDLER_H__
 
-#include <msxml2.h>
+#include <msxml6.h>
 
 #include <vector>
 
@@ -78,6 +78,7 @@ private:
 
 private: // disable copying
 	W32ContentHandler(const W32ContentHandler &);
+	const W32ContentHandler &operator = (const W32ContentHandler &);
 };
 
 #endif /* __W32CONTENTHANDLER_H__ */

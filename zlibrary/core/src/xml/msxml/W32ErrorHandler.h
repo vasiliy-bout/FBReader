@@ -20,7 +20,7 @@
 #ifndef __W32ERRORHANDLER_H__
 #define __W32ERRORHANDLER_H__
 
-#include <msxml2.h>
+#include <msxml6.h>
 
 class W32ErrorHandler : public ISAXErrorHandler {
 
@@ -45,6 +45,7 @@ private:
 
 private: // disable copying
 	W32ErrorHandler(const W32ErrorHandler &);
+	const W32ErrorHandler &operator = (const W32ErrorHandler &);
 };
 
 #endif /* __W32ERRORHANDLER_H__ */

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FictionBook PUBLIC "-//fbreader.org//formats" "http://data.fbreader.org/formats/fb2">
 <FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0" xmlns:l="http://www.w3.org/1999/xlink"><description><title-info><author><last-name>FBReader</last-name></author> <book-title>Tietoja FBReaderista</book-title> <lang>fi</lang></title-info></description>
 <body>
 <title><p>Tietoja FBReaderista &FBReaderVersion;</p></title>
