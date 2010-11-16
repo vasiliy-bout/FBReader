@@ -30,7 +30,8 @@
 
 
 ZLMSXMLReaderInternal::ZLMSXMLReaderInternal(ZLXMLReader &reader, const char *encoding) :
-		myReader(reader), mySaxReader(0), myContentHandler(0), myErrorHandler(0), myEntityResolver(0) {
+		myReader(reader), mySaxReader(0), myContentHandler(0), myErrorHandler(0), myEntityResolver(0),
+		myAsyncThread(0) {
 
 	HRESULT res = CoInitializeEx(0, COINIT_MULTITHREADED | COINIT_SPEED_OVER_MEMORY);
 	if (res != S_OK && res != S_FALSE && res != RPC_E_CHANGED_MODE) {
@@ -78,6 +79,9 @@ ZLMSXMLReaderInternal::~ZLMSXMLReaderInternal() {
 	}
 	if (myEntityResolver != 0) {
 		myEntityResolver->Release();
+	}
+	if (myAsyncThread != 0) {
+		CloseHandle(myAsyncThread);
 	}
 }
 

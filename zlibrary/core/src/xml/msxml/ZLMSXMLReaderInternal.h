@@ -27,10 +27,13 @@
 
 
 class ZLXMLReader;
+class ZLInputStream;
+
 class W32ContentHandler;
 class W32ErrorHandler;
 class W32EntityResolver;
-class ZLInputStream;
+class AsyncStream;
+
 
 class ZLMSXMLReaderInternal {
 
@@ -45,6 +48,10 @@ public:
 	void init(const char *encoding);
 	bool readDocument(shared_ptr<ZLInputStream> stream);
 
+	bool readAsync();
+	bool readFromBuffer(const char *data, size_t len);
+	bool finishAsync();
+
 private:
 	ZLXMLReader &myReader;
 
@@ -52,6 +59,11 @@ private:
 	W32ContentHandler *myContentHandler;
 	W32ErrorHandler *myErrorHandler;
 	W32EntityResolver *myEntityResolver;
+
+	shared_ptr<ZLInputStream> myAsyncStream;
+	HANDLE myAsyncThread;
+
+friend DWORD WINAPI asyncThread(LPVOID);
 
 private: // disable copying
 	ZLMSXMLReaderInternal(const ZLMSXMLReaderInternal &);

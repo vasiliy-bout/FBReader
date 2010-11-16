@@ -32,7 +32,6 @@
 
 #include "msxml/ZLMSXMLReaderInternal.h"
 
-/*
 class ZLXMLReaderHandler : public ZLAsynchronousInputStream::Handler {
 
 public:
@@ -51,16 +50,17 @@ ZLXMLReaderHandler::ZLXMLReaderHandler(ZLXMLReader &reader) : myReader(reader) {
 
 void ZLXMLReaderHandler::initialize(const char *encoding) {
 	myReader.initialize(encoding);
+	myReader.myInternalReader->readAsync();
 }
 
 void ZLXMLReaderHandler::shutdown() {
+	myReader.myInternalReader->finishAsync();
 	myReader.shutdown();
 }
 
 bool ZLXMLReaderHandler::handleBuffer(const char *data, size_t len) {
-	return myReader.readFromBuffer(data, len);
+	return myReader.myInternalReader->readFromBuffer(data, len);
 }
-*/
 
 
 
@@ -208,10 +208,8 @@ const char *ZLXMLReader::attributeValue(const char **xmlattributes, const Attrib
 }
 
 bool ZLXMLReader::readDocument(shared_ptr<ZLAsynchronousInputStream> stream) {
-//	ZLXMLReaderHandler handler(*this);
-//	return stream->processInput(handler);
-	setErrorMessage("Asynchronous XML parser is not implemented!!!");
-	return false;
+	ZLXMLReaderHandler handler(*this);
+	return stream->processInput(handler);
 }
 
 const std::string &ZLXMLReader::errorMessage() const {
