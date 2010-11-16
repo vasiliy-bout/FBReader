@@ -101,7 +101,6 @@ protected:
 private:
 	bool myInterrupted;
 	ZLMSXMLReaderInternal *myInternalReader;
-	char *myParserBuffer;
 	std::vector<shared_ptr<std::map<std::string,std::string> > > myNamespaces;
 
 	std::string myErrorMessage;

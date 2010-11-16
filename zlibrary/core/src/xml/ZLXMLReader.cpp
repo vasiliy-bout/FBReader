@@ -65,8 +65,6 @@ bool ZLXMLReaderHandler::handleBuffer(const char *data, size_t len) {
 
 
 
-static const size_t BUFFER_SIZE = 2048;
-
 void ZLXMLReader::startElementHandler(const char*, const char**) {
 }
 
@@ -85,11 +83,9 @@ const std::map<std::string,std::string> &ZLXMLReader::namespaces() const {
 
 ZLXMLReader::ZLXMLReader(const char *encoding) {
 	myInternalReader = new ZLMSXMLReaderInternal(*this, encoding);
-	myParserBuffer = new char[BUFFER_SIZE];
 }
 
 ZLXMLReader::~ZLXMLReader() {
-	delete[] myParserBuffer;
 	delete myInternalReader;
 }
 
@@ -102,11 +98,15 @@ bool ZLXMLReader::readDocument(shared_ptr<ZLInputStream> stream) {
 		return false;
 	}
 
+	char *buffer = new char[256];
 	bool useWindows1252 = false;
-	stream->read(myParserBuffer, 256);
-	std::string stringBuffer(myParserBuffer, 256);
+	stream->read(buffer, 256);
+	std::string stringBuffer(buffer, 256);
+	delete[] buffer;
+	buffer = 0;
+
 	stream->seek(0, true);
-	int index = stringBuffer.find('>');
+	const int index = stringBuffer.find('>');
 	if (index > 0) {
 		stringBuffer = ZLUnicodeUtil::toLower(stringBuffer.substr(0, index));
 		const int isoIndex = stringBuffer.find("\"iso-8859-1\"");

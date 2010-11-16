@@ -81,7 +81,7 @@ ZLMSXMLReaderInternal::~ZLMSXMLReaderInternal() {
 		myEntityResolver->Release();
 	}
 	if (myAsyncThread != 0) {
-		CloseHandle(myAsyncThread);
+		finishAsync();
 	}
 }
 

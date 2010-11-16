@@ -53,7 +53,7 @@ private:
 	HANDLE myDataEvent;
 	HANDLE myDataMutex;
 
-	char *myBuffer;
+	char * volatile myBuffer;
 	volatile size_t myBufferSize;
 	volatile size_t myDataSize;
 	volatile bool myEof;

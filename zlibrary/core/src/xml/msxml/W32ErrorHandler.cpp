@@ -19,6 +19,8 @@
 
 #include <iostream>
 
+#include <ZLStringUtil.h>
+
 #include "W32ErrorHandler.h"
 
 
@@ -30,10 +32,15 @@ W32ErrorHandler::~W32ErrorHandler() {
 
 
 static std::string pwch2str(const wchar_t *pwchStr, int cchStr) {
+	if (pwchStr == 0) {
+		return "(null)";
+	}
 	char buffer[1024];
 	int len;
 	len = WideCharToMultiByte(CP_UTF8, 0, pwchStr, cchStr, buffer, 1024, 0, 0);
-	return std::string(buffer, len);
+	std::string str(buffer, len);
+	ZLStringUtil::stripWhiteSpaces(str);
+	return str;
 }
 
 template <class _Elem>
@@ -44,31 +51,40 @@ template <class _Elem>
 
 HRESULT STDMETHODCALLTYPE W32ErrorHandler::error(ISAXLocator *pLocator, const wchar_t *pwchErrorMessage, HRESULT hrErrorCode) {
 	int line = -1, col = -1;
+	const wchar_t *sysId;
 	if (pLocator != 0) {
 		pLocator->getLineNumber(&line);
 		pLocator->getColumnNumber(&col);
+		pLocator->getSystemId(&sysId);
 	}
-	std::cerr << "SAX error (" << hrErrorCode << "): \"" << pwch2str(pwchErrorMessage, -1) << "\" at (" << line << ", " << col << ")" << std::endl;
+	std::cerr << "SAX error (" << hrErrorCode << "): \"" << pwch2str(pwchErrorMessage, -1) << "\""
+			<< " at " << pwch2str(sysId, -1) << " (" << line << ", " << col << ")" << std::endl;
 	return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE W32ErrorHandler::fatalError(ISAXLocator *pLocator, const wchar_t *pwchErrorMessage, HRESULT hrErrorCode) {
 	int line = -1, col = -1;
+	const wchar_t *sysId;
 	if (pLocator != 0) {
 		pLocator->getLineNumber(&line);
 		pLocator->getColumnNumber(&col);
+		pLocator->getSystemId(&sysId);
 	}
-	std::cerr << "SAX fatal error (" << hrErrorCode << "): \"" << pwch2str(pwchErrorMessage, -1) << "\" at (" << line << ", " << col << ")" << std::endl;
+	std::cerr << "SAX fatal error (" << hrErrorCode << "): \"" << pwch2str(pwchErrorMessage, -1) << "\""
+			<< " at " << pwch2str(sysId, -1) << " (" << line << ", " << col << ")" << std::endl;
 	return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE W32ErrorHandler::ignorableWarning(ISAXLocator *pLocator, const wchar_t *pwchErrorMessage, HRESULT hrErrorCode) {
 	int line = -1, col = -1;
+	const wchar_t *sysId;
 	if (pLocator != 0) {
 		pLocator->getLineNumber(&line);
 		pLocator->getColumnNumber(&col);
+		pLocator->getSystemId(&sysId);
 	}
-	std::cerr << "SAX warning (" << hrErrorCode << "): \"" << pwch2str(pwchErrorMessage, -1) << "\" at (" << line << ", " << col << ")" << std::endl;
+	std::cerr << "SAX warning (" << hrErrorCode << "): \"" << pwch2str(pwchErrorMessage, -1) << "\""
+			<< " at " << pwch2str(sysId, -1) << " (" << line << ", " << col << ")" << std::endl;
 	return S_OK;
 }
 
