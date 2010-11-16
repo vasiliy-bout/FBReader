@@ -21,6 +21,9 @@
 #	define WIN32_LEAN_AND_MEAN
 #	include <windows.h>
 #	include <tchar.h>
+#	include <fcntl.h>
+#	include <io.h>
+#	include <iostream>
 #endif
 
 #include <ZLibrary.h>
@@ -29,11 +32,22 @@
 
 
 #ifdef WIN32
+
+#ifdef _USE_CONSOLE
+void __RedirectIOToConsole();
+#	define RedirectIOToConsole()	__RedirectIOToConsole()
+#else
+#	define RedirectIOToConsole()	do {} while (false)
+#endif
+
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 	int argc = 1;
 	char **argv = new char*[2];
 	argv[0] = "FBReader";
 	argv[1] = 0;
+
+	RedirectIOToConsole();
+
 #else
 int main(int argc, char **argv) {
 #endif
@@ -45,3 +59,37 @@ int main(int argc, char **argv) {
 	ZLibrary::shutdown();
 	return 0;
 }
+
+#ifdef WIN32
+#ifdef _USE_CONSOLE
+
+#ifndef _MAX_CONSOLE_LINES
+#define _MAX_CONSOLE_LINES 500;
+#endif
+static const WORD MAX_CONSOLE_LINES = _MAX_CONSOLE_LINES;
+
+void __redirectStream(DWORD nStdHanle, FILE *stream, const char *mode) {
+	intptr_t lStdHandle = (intptr_t) GetStdHandle(nStdHanle);
+	int hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+	FILE *fp = _fdopen(hConHandle, mode);
+	*stream = *fp;
+	setvbuf(stream, NULL, _IONBF, 0);
+}
+
+void __RedirectIOToConsole() {
+	CONSOLE_SCREEN_BUFFER_INFO coninfo;
+
+	AllocConsole();
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
+	coninfo.dwSize.Y = MAX_CONSOLE_LINES;
+	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
+
+	__redirectStream(STD_OUTPUT_HANDLE, stdout, "w");
+	__redirectStream(STD_INPUT_HANDLE, stdin, "r");
+	__redirectStream(STD_ERROR_HANDLE, stderr, "w");
+
+	std::ios::sync_with_stdio(true);
+}
+
+#endif
+#endif

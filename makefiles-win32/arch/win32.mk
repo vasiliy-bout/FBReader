@@ -17,6 +17,10 @@ CFLAGS = $(CFLAGS) /D "WIN32" /D "_WIN32=1" /D "_WINDOWS" /D "_CRT_SECURE_NO_WAR
 LDFLAGS = $(LDFLAGS) /SUBSYSTEM:WINDOWS /DYNAMICBASE /NXCOMPAT /MACHINE:X86 /errorReport:none
 
 
+#CFLAGS = $(CFLAGS) /D "_USE_CONSOLE"
+#CFLAGS = $(CFLAGS) /D "_MAX_CONSOLE_LINES=500"
+
+
 UILIBS = gdi32.lib comctl32.lib comdlg32.lib libpng-3.lib jpeg62.lib libungif4.lib libtiff3.lib
 
 RM = DEL /Q
