@@ -98,7 +98,7 @@ HRESULT W32ContentHandler::decodeAttributes(ISAXAttributes *pAttributes) {
 
 HRESULT STDMETHODCALLTYPE W32ContentHandler::characters(const wchar_t *pwchChars, int cchChars) {
 	if (myReader.isInterrupted()) {
-		return S_OK; // TODO: interrupt???
+		return E_ABORT;
 	}
 	const int len = MSXMLUtil::decodeWideChars(pwchChars, cchChars, &myBuffer, &myBufferSize);
 	if (len < 0) {
@@ -113,7 +113,7 @@ HRESULT STDMETHODCALLTYPE W32ContentHandler::startElement(const wchar_t *pwchNam
 		ISAXAttributes *pAttributes) {
 
 	if (myReader.isInterrupted()) {
-		return S_OK; // TODO: interrupt???
+		return E_ABORT;
 	}
 
 	HRESULT res = decodeAttributes(pAttributes);
@@ -155,7 +155,7 @@ HRESULT STDMETHODCALLTYPE W32ContentHandler::endElement(const wchar_t *pwchNames
 		const wchar_t *pwchLocalName, int cchLocalName, const wchar_t *pwchQName, int cchQName) {
 
 	if (myReader.isInterrupted()) {
-		return S_OK; // TODO: interrupt???
+		return E_ABORT;
 	}
 
 	if (MSXMLUtil::decodeWideChars(pwchQName, cchQName, &myBuffer, &myBufferSize) < 0) {
@@ -175,7 +175,6 @@ HRESULT STDMETHODCALLTYPE W32ContentHandler::endElement(const wchar_t *pwchNames
 
 
 HRESULT STDMETHODCALLTYPE W32ContentHandler::skippedEntity(const wchar_t *pwchName, int cchName) {
-	// TODO: handle skipped entity
 	return S_OK;
 }
 

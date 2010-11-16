@@ -217,5 +217,9 @@ bool ZLMSXMLReaderInternal::finishAsync() {
 	}
 	CloseHandle(myAsyncThread);
 	myAsyncThread = 0;
+
+	if (res == E_ABORT && myReader.isInterrupted()) {
+		res = S_OK;
+	}
 	return SUCCEEDED(res);
 }

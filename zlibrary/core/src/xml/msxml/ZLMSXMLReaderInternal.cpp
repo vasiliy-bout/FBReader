@@ -135,6 +135,9 @@ bool ZLMSXMLReaderInternal::readDocument(shared_ptr<ZLInputStream> stream) {
 	V_UNKNOWN(&input) = new W32SynchronousStream(stream);
 
 	HRESULT res = mySaxReader->parse(input);
+	if (res == E_ABORT && myReader.isInterrupted()) {
+		res = S_OK;
+	}
 
 	VariantClear(&input);
 
