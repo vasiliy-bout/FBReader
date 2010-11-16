@@ -49,7 +49,7 @@ XML_LIBS = msxml6.lib
 ARCHIVER_LIBS = zlib1.lib libbz2.lib
 !endif
 !ifndef NETWORK_LIBS
-NETWORK_LIBS = libcurl-3.lib
+NETWORK_LIBS = libcurl.lib
 !endif
 
 # Options:

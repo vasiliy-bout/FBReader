@@ -18,7 +18,6 @@ LDFLAGS = $(LDFLAGS) /SUBSYSTEM:WINDOWS /DYNAMICBASE /NXCOMPAT /MACHINE:X86 /err
 
 
 UILIBS = gdi32.lib comctl32.lib comdlg32.lib libpng-3.lib jpeg62.lib libungif4.lib libtiff3.lib
-NETWORK_LIBS = libcurl-3.lib libssh2.lib libssl32.lib
 
 RM = DEL /Q
 RM_QUIET = DEL /Q
